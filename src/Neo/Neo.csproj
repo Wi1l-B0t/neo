@@ -26,6 +26,12 @@
     <ProjectReference Include="..\Neo.VM\Neo.VM.csproj" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
+    <Protobuf Include="Sign\sign.proto" GrpcServices="Client" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.67.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.70.0" PrivateAssets="all" />
+  </ItemGroup>
+
   <ItemGroup>
     <InternalsVisibleTo Include="Neo.SmartContract.Testing" />
     <InternalsVisibleTo Include="Neo.SmartContract.TestEngine" />

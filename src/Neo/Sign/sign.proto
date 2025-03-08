@@ -1,0 +1,53 @@
+
+syntax = "proto3";
+
+package signpb;
+
+message ScriptHashSign {
+    bytes signature = 1;
+    bytes public_key = 2;
+    bytes contract  = 3;
+}
+
+enum SignResult {
+    /// single sign
+    Single    = 0;
+    /// multiple signs, aka. multisig
+    Multiple  = 1;
+    /// no such key-pair(no such public key or no corresponding private key)
+    NoSuchKey = 2;
+    /// this key-pair is locked
+    Locked    = 3;
+}
+
+message ScriptHashSigns {
+    repeated ScriptHashSign signs = 1;
+    SignResult result = 2;
+}
+
+message SignWithScriptHashesRequest {
+    bytes  sign_data = 1;
+    uint32 network   = 2;
+    repeated string script_hashes = 3;
+}
+
+message SignWithScriptHashesResponse {
+    /// script_hash -> script_hash_signs
+    map<string, ScriptHashSigns> signs = 1;
+}
+
+message SignWithPublicKeyRequest {
+    bytes  sign_data = 1;
+    uint32 network   = 2;
+    bytes  public_key = 3;
+}
+
+message SignWithPublicKeyResponse {
+    bytes signature = 1;
+}
+
+service SecureSign {
+    rpc sign_with_script_hashes(SignWithScriptHashesRequest) returns (SignWithScriptHashesResponse) {}
+
+    rpc sign_with_public_key(SignWithPublicKeyRequest) returns (SignWithPublicKeyResponse) {}
+}

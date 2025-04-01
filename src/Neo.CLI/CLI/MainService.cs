@@ -17,6 +17,7 @@ using Neo.Ledger;
 using Neo.Network.P2P;
 using Neo.Network.P2P.Payloads;
 using Neo.Plugins;
+using Neo.Sign;
 using Neo.SmartContract;
 using Neo.SmartContract.Manifest;
 using Neo.SmartContract.Native;
@@ -158,7 +159,9 @@ namespace Neo.CLI
                 ConsoleHelper.Info("ScriptHash: ", $"{account.ScriptHash}");
             }
             wallet.Save();
+
             CurrentWallet = wallet;
+            SignerFactory.RegisterSigner(wallet.GetSignerName(), wallet);
         }
 
         private IEnumerable<Block> GetBlocks(Stream stream, bool read_start = false)
@@ -367,6 +370,7 @@ namespace Neo.CLI
             }
 
             CurrentWallet = Wallet.Open(path, password, NeoSystem.Settings) ?? throw new NotSupportedException();
+            SignerFactory.RegisterSigner(CurrentWallet.GetSignerName(), CurrentWallet);
         }
 
         public async void Start(CommandLineOptions options)

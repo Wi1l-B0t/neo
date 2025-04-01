@@ -618,8 +618,9 @@ namespace Neo.Wallets
         public bool Sign(ContractParametersContext context)
         {
             if (context.Network != ProtocolSettings.Network) return false;
-            bool fSuccess = false;
-            foreach (UInt160 scriptHash in context.ScriptHashes)
+
+            var fSuccess = false;
+            foreach (var scriptHash in context.ScriptHashes)
             {
                 var account = GetAccount(scriptHash);
                 if (account != null)
@@ -657,24 +658,14 @@ namespace Neo.Wallets
                 }
 
                 // Try Smart contract verification
-                var contract = NativeContract.ContractManagement.GetContract(context.SnapshotCache, scriptHash);
-                if (contract != null)
-                {
-                    var deployed = new DeployedContract(contract);
-
-                    // Only works with verify without parameters
-                    if (deployed.ParameterList.Length == 0)
-                    {
-                        fSuccess |= context.Add(deployed);
-                    }
-                }
+                fSuccess |= context.AddWithScriptHash(scriptHash);
             }
 
             return fSuccess;
         }
 
         /// <inheritdoc/>
-        public byte[] Sign(byte[] signData, ECPoint publicKey)
+        public ReadOnlyMemory<byte> Sign(byte[] signData, ECPoint publicKey)
         {
             if (signData is null) throw new ArgumentNullException(nameof(signData));
             if (publicKey is null) throw new ArgumentNullException(nameof(publicKey));
@@ -747,6 +738,17 @@ namespace Neo.Wallets
                 newWallet.CreateAccount(account.Contract, account.GetKey());
             }
             return newWallet;
+        }
+
+        /// <summary>
+        /// Gets the name of the signer.
+        /// If the Name is not null or empty, it will return the Name;
+        /// otherwise it will return the file name(without extension) of the Path.
+        /// </summary>
+        /// <returns>The name of the signer.</returns>
+        public string GetSignerName()
+        {
+            return string.IsNullOrEmpty(Name) ? System.IO.Path.GetFileNameWithoutExtension(Path) : Name;
         }
 
         private static IWalletFactory GetFactory(string path)

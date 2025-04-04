@@ -208,12 +208,15 @@ namespace Neo.CLI
                     }
                 }
 
-            var paths = Directory.EnumerateFiles(".", "chain.*.acc", SearchOption.TopDirectoryOnly).Concat(Directory.EnumerateFiles(".", "chain.*.acc.zip", SearchOption.TopDirectoryOnly)).Select(p => new
-            {
-                FileName = Path.GetFileName(p),
-                Start = uint.Parse(Regex.Match(p, @"\d+").Value),
-                IsCompressed = p.EndsWith(".zip")
-            }).OrderBy(p => p.Start);
+            var paths = Directory.EnumerateFiles(".", "chain.*.acc", SearchOption.TopDirectoryOnly)
+                .Concat(Directory.EnumerateFiles(".", "chain.*.acc.zip", SearchOption.TopDirectoryOnly))
+                .Select(p => new
+                {
+                    FileName = Path.GetFileName(p),
+                    Start = uint.Parse(Regex.Match(p, @"\d+").Value),
+                    IsCompressed = p.EndsWith(".zip")
+                })
+                .OrderBy(p => p.Start);
 
             uint height = NativeContract.Ledger.CurrentIndex(NeoSystem.StoreView);
             foreach (var path in paths)
@@ -232,8 +235,10 @@ namespace Neo.CLI
                     }
                 else
                     using (FileStream fs = new(path.FileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
                         foreach (var block in GetBlocks(fs, true))
                             yield return block;
+                    }
             }
         }
 

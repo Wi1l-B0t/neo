@@ -145,7 +145,7 @@ namespace Neo.Network.P2P
                 // Avoid compression
 
                 using MemoryStream ms = new();
-                using BinaryWriter writer = new(ms, Utility.StrictUTF8, true);
+                using BinaryWriter writer = new(ms, StringExtensions.StrictUTF8, true);
 
                 writer.Write((byte)(Flags & ~MessageFlags.Compressed));
                 writer.Write((byte)Command);

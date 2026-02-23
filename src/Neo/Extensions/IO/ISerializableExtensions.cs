@@ -24,7 +24,7 @@ namespace Neo.Extensions
         public static byte[] ToArray(this ISerializable value)
         {
             using MemoryStream ms = new();
-            using BinaryWriter writer = new(ms, Utility.StrictUTF8, true);
+            using BinaryWriter writer = new(ms, StringExtensions.StrictUTF8, true);
             value.Serialize(writer);
             writer.Flush();
             return ms.ToArray();

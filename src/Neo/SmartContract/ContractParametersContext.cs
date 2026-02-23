@@ -409,7 +409,7 @@ namespace Neo.SmartContract
             };
 
             using (var ms = new MemoryStream())
-            using (var writer = new BinaryWriter(ms, Utility.StrictUTF8))
+            using (var writer = new BinaryWriter(ms, StringExtensions.StrictUTF8))
             {
                 Verifiable.SerializeUnsigned(writer);
                 writer.Flush();

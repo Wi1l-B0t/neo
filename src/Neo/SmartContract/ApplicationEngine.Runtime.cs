@@ -380,7 +380,7 @@ namespace Neo.SmartContract
                     throw new InvalidOperationException($"The type of the argument `{p.Name}` does not match the formal parameter.");
             }
             using MemoryStream ms = new(MaxNotificationSize);
-            using BinaryWriter writer = new(ms, Utility.StrictUTF8, true);
+            using BinaryWriter writer = new(ms, StringExtensions.StrictUTF8, true);
             BinarySerializer.Serialize(writer, state, MaxNotificationSize, Limits.MaxStackSize);
             SendNotification(CurrentScriptHash!, name, state);
         }
@@ -392,7 +392,7 @@ namespace Neo.SmartContract
             if (CurrentContext!.GetState<ExecutionContextState>().Contract is null)
                 throw new InvalidOperationException("Notifications are not allowed in dynamic scripts.");
             using MemoryStream ms = new(MaxNotificationSize);
-            using BinaryWriter writer = new(ms, Utility.StrictUTF8, true);
+            using BinaryWriter writer = new(ms, StringExtensions.StrictUTF8, true);
             BinarySerializer.Serialize(writer, state, MaxNotificationSize, Limits.MaxStackSize);
             SendNotification(CurrentScriptHash!, eventName.ToStrictUtf8String(), state);
         }

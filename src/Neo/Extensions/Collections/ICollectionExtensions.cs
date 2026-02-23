@@ -65,7 +65,7 @@ namespace Neo.Extensions
             where T : ISerializable
         {
             using MemoryStream ms = new();
-            using BinaryWriter writer = new(ms, Utility.StrictUTF8, true);
+            using BinaryWriter writer = new(ms, StringExtensions.StrictUTF8, true);
             writer.Write(value);
             writer.Flush();
             return ms.ToArray();

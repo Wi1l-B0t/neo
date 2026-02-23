@@ -185,7 +185,7 @@ namespace Neo.SmartContract
         public static byte[] Serialize(StackItem item, long maxSize, long maxItems)
         {
             using MemoryStream ms = new();
-            using BinaryWriter writer = new(ms, Utility.StrictUTF8, true);
+            using BinaryWriter writer = new(ms, StringExtensions.StrictUTF8, true);
             Serialize(writer, item, maxSize, maxItems);
             writer.Flush();
             return ms.ToArray();

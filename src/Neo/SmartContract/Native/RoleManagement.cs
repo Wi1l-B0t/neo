@@ -79,7 +79,7 @@ namespace Neo.SmartContract.Native
                 throw new InvalidOperationException("Role already designated");
 
             var deduplicated = nodes.Distinct().Count();
-            if (deduplicated != nodes.Length) throw new InvalidOperationException($"The `nodes` contains duplicate elements");
+            if (deduplicated != nodes.Length) throw new InvalidOperationException($"Duplicate publickeys are not allowed");
 
             NodeList list = new();
             list.AddRange(nodes);

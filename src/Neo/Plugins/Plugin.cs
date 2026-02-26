@@ -123,7 +123,7 @@ namespace Neo.Plugins
             {
                 case ".json":
                 case ".dll":
-                    Logs.RuntimeLogger.Warning($"File {File} is {ChangeType}, please restart node.", e.Name, e.ChangeType);
+                    Logs.RuntimeLogger.Warning("File {File} is {ChangeType}, please restart node.", e.Name, e.ChangeType);
                     break;
             }
         }

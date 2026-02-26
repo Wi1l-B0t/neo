@@ -107,7 +107,7 @@ namespace Neo.Plugins
         protected Plugin()
         {
             Plugins.Add(this);
-            Logger = Logs.GetLogger($"{nameof(Plugin)}:{Name}");
+            Logger = Logs.GetLogger($"{nameof(Plugin)}_{Name}");
             Configure();
         }
 
